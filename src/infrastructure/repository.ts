@@ -1,1 +1,2 @@
-import type{Business}from'../core/business';export class TenantRepository{constructor(private readonly data:Business[]){}findByTenant(tenantId:string){return this.data.find(x=>x.id===tenantId)??null}}
+import type{Business,Customer,Item}from'../core/business';
+export class TenantRepository{constructor(private readonly data:Business[]){}private get(id:string){const b=this.data.find(x=>x.id===id);if(!b)throw new Error('Unknown tenant');return b}business(id:string){return structuredClone(this.get(id))}customers(id:string){return structuredClone(this.get(id).customers)}items(id:string){return structuredClone(this.get(id).items)}addCustomer(id:string,c:Customer){this.get(id).customers.push(c);return c}addItem(id:string,i:Item){this.get(id).items.push(i);return i}}
