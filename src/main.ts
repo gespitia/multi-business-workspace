@@ -1,5 +1,6 @@
 import './style.css';
-import { createWorkspace, type Role } from './application/workspace';
+import { createWorkspace } from './application/workspace';
+import type { Role } from './core/business';
 
 const ws=createWorkspace();
 const root=document.querySelector('#app')!;
