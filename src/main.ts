@@ -1,3 +1,4 @@
+import './demo-bridge';
 import './style.css';
 import { createWorkspace } from './application/workspace';
 import type { Role } from './core/business';
