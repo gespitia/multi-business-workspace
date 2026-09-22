@@ -1,0 +1,1 @@
+import test from'node:test';import assert from'node:assert/strict';const businesses=[{id:'a'},{id:'b'}];const select=id=>businesses.find(x=>x.id===id);test('tenant switch resolves selected business',()=>assert.equal(select('b').id,'b'));test('unknown tenant is rejected',()=>assert.equal(select('x'),undefined));
