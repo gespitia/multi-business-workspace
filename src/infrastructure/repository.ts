@@ -1,0 +1,1 @@
+import type{Business}from'../core/business';export class TenantRepository{constructor(private readonly data:Business[]){}findByTenant(tenantId:string){return this.data.find(x=>x.id===tenantId)??null}}
