@@ -48,6 +48,7 @@ function render(){
       <button data-demo-step="5"><b>05</b><span>Trace isolation</span><small>See the boundary</small></button>
     </div>
   </section>
+  <nav class="mobile-nav">${nav.map(n=>`<button class="${section===n[0]?'active':''}" data-section="${n[0]}"><span>${n[1]}</span></button>`).join('')}</nav>
   <section class="workspace"><aside><label>WORKSPACE</label>${nav.map(n=>`<button class="${section===n[0]?'active':''}" data-section="${n[0]}">${n[1]}</button>`).join('')}<hr><label>BUSINESSES</label>${ws.all().map(x=>`<button class="${x.id===b.id?'active':''}" data-tenant="${x.id}"><b>${esc(x.name)}</b><small>${esc(x.type)}</small></button>`).join('')}<label class="role-label">ROLE</label><select id="role"><option value="owner" ${ws.context.role==='owner'?'selected':''}>Owner</option><option value="manager" ${ws.context.role==='manager'?'selected':''}>Manager</option><option value="viewer" ${ws.context.role==='viewer'?'selected':''}>Viewer</option></select></aside>
   <section class="content">${page}</section></section>
   <section class="architecture panel"><label>ARCHITECTURE TRACE</label><div><span>01 UI / App Shell</span><i>→</i><span>02 Tenant Context</span><i>→</i><span>03 Business Module</span><i>→</i><span>04 Backend Core</span><i>→</i><span>05 Tenant Repository</span><i>→</i><span>06 PostgreSQL / RLS</span></div></section>
