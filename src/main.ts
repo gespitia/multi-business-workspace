@@ -8,6 +8,7 @@ const root=document.querySelector('#app')!;
 let section='overview';
 let query='';
 let assistant='';
+let demoStep=0;
 
 const esc=(s:string)=>s.replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]!));
 const money=(n:number)=>new Intl.NumberFormat('en-US',{maximumFractionDigits:0}).format(n);
@@ -37,11 +38,30 @@ function render(){
 
   root.innerHTML=`<main><header><div><strong>MULTI-BUSINESS WORKSPACE</strong><span> / tenant-aware product reference</span></div><a href="https://github.com/gespitia/multi-business-workspace">Repository ↗</a></header>
   <section class="hero"><div><label>MULTI-TENANT FRONTEND ARCHITECTURE</label><h1>One owner.<br><em>Multiple businesses.</em></h1><p>Switch context without losing the domain. Each module reads and mutates through the active tenant boundary.</p></div><div class="context"><span>ACTIVE TENANT</span><b>${esc(b.name)}</b><small>${esc(b.type)} · ${ws.context.role}</small></div></section>
+  <section class="demo-guide panel">
+    <div class="guide-copy"><label>INTERACTIVE PROOF</label><h2>See tenant isolation in 60 seconds</h2><p>Don’t just read the architecture. Trigger it.</p></div>
+    <div class="guide-steps">
+      <button data-demo-step="1"><b>01</b><span>Switch business</span><small>Data changes</small></button>
+      <button data-demo-step="2"><b>02</b><span>Change role</span><small>Permissions change</small></button>
+      <button data-demo-step="3"><b>03</b><span>Modify data</span><small>Tenant gets the write</small></button>
+      <button data-demo-step="4"><b>04</b><span>Ask assistant</span><small>Reads active tenant</small></button>
+      <button data-demo-step="5"><b>05</b><span>Trace isolation</span><small>See the boundary</small></button>
+    </div>
+  </section>
   <section class="workspace"><aside><label>WORKSPACE</label>${nav.map(n=>`<button class="${section===n[0]?'active':''}" data-section="${n[0]}">${n[1]}</button>`).join('')}<hr><label>BUSINESSES</label>${ws.all().map(x=>`<button class="${x.id===b.id?'active':''}" data-tenant="${x.id}"><b>${esc(x.name)}</b><small>${esc(x.type)}</small></button>`).join('')}<label class="role-label">ROLE</label><select id="role"><option value="owner" ${ws.context.role==='owner'?'selected':''}>Owner</option><option value="manager" ${ws.context.role==='manager'?'selected':''}>Manager</option><option value="viewer" ${ws.context.role==='viewer'?'selected':''}>Viewer</option></select></aside>
   <section class="content">${page}</section></section>
   <section class="architecture panel"><label>ARCHITECTURE TRACE</label><div><span>01 UI / App Shell</span><i>→</i><span>02 Tenant Context</span><i>→</i><span>03 Business Module</span><i>→</i><span>04 Backend Core</span><i>→</i><span>05 Tenant Repository</span><i>→</i><span>06 PostgreSQL / RLS</span></div></section>
   <footer>Browser-first reference implementation. Data is local demo state; PostgreSQL RLS and server-side authorization are modeled, not connected.</footer></main>`;
 
+  root.querySelectorAll('[data-demo-step]').forEach(x=>x.addEventListener('click',()=>{
+    demoStep=Number((x as HTMLElement).dataset.demoStep);
+    if(demoStep===1){ws.switchTo(ws.context.tenantId==='blue-table'?'northline':'blue-table');section='overview';query='';}
+    if(demoStep===2){ws.setRole(ws.context.role==='owner'?'manager':'owner');section='overview';}
+    if(demoStep===3){section='customers';}
+    if(demoStep===4){section='overview';assistant='How many customers does this tenant have?';}
+    if(demoStep===5){section='reports';}
+    render();
+  }));
   root.querySelectorAll('[data-section]').forEach(x=>x.addEventListener('click',()=>{section=(x as HTMLElement).dataset.section!;query='';render()}));
   root.querySelectorAll('[data-tenant]').forEach(x=>x.addEventListener('click',()=>{ws.switchTo((x as HTMLElement).dataset.tenant!);section='overview';query='';render()}));
   root.querySelector('#role')?.addEventListener('change',e=>{ws.setRole((e.target as HTMLSelectElement).value as Role);render()});
