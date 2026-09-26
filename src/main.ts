@@ -1,7 +1,16 @@
 import'./demo-bridge';import styleText from'./style.css?inline';import{createWorkspace,type WorkspaceEvent}from'./application/workspace';import{permissions}from'./application/workspace';import type{Role}from'./core/business';
 export type MountOptions={tenantId?:string;role?:Role;onEvent?:(event:WorkspaceEvent)=>void};
 export type MountRoot=HTMLElement|ShadowRoot;
-const injectStyles=(root:MountRoot)=>{if(root.querySelector(':scope > style[data-microfrontend-style]'))return;const style=document.createElement('style');style.dataset['microfrontendStyle']='';const shadow=root.getRootNode() instanceof ShadowRoot;style.textContent=shadow?styleText.replace(':root{',':host{'):styleText;root.prepend(style)};
+const injectStyles=(root:MountRoot)=>{
+if(root.querySelector(':scope > style[data-microfrontend-style]'))return;
+const style=document.createElement('style');
+style.dataset['microfrontendStyle']='';
+const shadow=root.getRootNode() instanceof ShadowRoot;
+style.textContent=shadow
+?styleText.replace(':root{--demo-bg:#f4f5f2;--demo-paper:#fff;--demo-ink:#17201c;--demo-muted:#68736c;--demo-line:#dfe4df;--demo-soft:#edf0ec;--demo-accent:#766f9f;font-family:Inter,ui-sans-serif,system-ui,sans-serif;color:var(--demo-ink);background:var(--demo-bg);line-height:1.45}',':host{color:var(--demo-ink,#17201c);background:var(--demo-bg,#f4f5f2);font-family:var(--demo-font-family,Inter,ui-sans-serif,system-ui,sans-serif);line-height:1.45}')
+:styleText;
+root.prepend(style);
+};
 export function mount(root:MountRoot,options:MountOptions={}){
 injectStyles(root);const ws=createWorkspace(options.tenantId,{onEvent:options.onEvent});if(options.role)ws.setRole(options.role);let section='overview',query='',assistant='',demoStep=0;
 const esc=(s:string)=>s.replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]!));const money=(n:number)=>new Intl.NumberFormat('en-US',{maximumFractionDigits:0}).format(n);
