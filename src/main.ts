@@ -7,7 +7,7 @@ const style=document.createElement('style');
 style.dataset['microfrontendStyle']='';
 const shadow=root.getRootNode() instanceof ShadowRoot;
 style.textContent=shadow
-?styleText.replace(':root{--demo-bg:#f4f5f2;--demo-paper:#fff;--demo-ink:#17201c;--demo-muted:#68736c;--demo-line:#dfe4df;--demo-soft:#edf0ec;--demo-accent:#766f9f;font-family:Inter,ui-sans-serif,system-ui,sans-serif;color:var(--demo-ink);background:var(--demo-bg);line-height:1.45}',':host{color:var(--demo-ink,#17201c);background:var(--demo-bg,#f4f5f2);font-family:var(--demo-font-family,Inter,ui-sans-serif,system-ui,sans-serif);line-height:1.45}')
+?styleText.replace(':root{--demo-bg:#f4f5f2;--demo-paper:#fff;--demo-ink:#17201c;--demo-muted:#68736c;--demo-line:#dfe4df;--demo-soft:#edf0ec;--demo-accent:#766f9f;font-family:Inter,ui-sans-serif,system-ui,sans-serif;color:var(--demo-ink);background:var(--demo-bg);line-height:1.45}',':host{--demo-bg:var(--mb-bg,#f4f5f2);--demo-paper:var(--mb-paper,#fff);--demo-ink:var(--mb-ink,#17201c);--demo-muted:var(--mb-muted,#68736c);--demo-line:var(--mb-line,#dfe4df);--demo-soft:var(--mb-soft,#edf0ec);--demo-accent:var(--mb-accent,#766f9f);--demo-font-family:var(--mb-font-family,Inter,ui-sans-serif,system-ui,sans-serif);color:var(--demo-ink);background:var(--demo-bg);font-family:var(--demo-font-family);line-height:1.45}')
 :styleText;
 root.prepend(style);
 };
