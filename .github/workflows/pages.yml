@@ -16,7 +16,8 @@ jobs:
         with:
           node-version: 22
       - run: npm install
-      - run: npm run build
+      - run: npm run build:all
+      - run: mkdir -p dist/microfrontend && cp -R dist-micro/. dist/microfrontend/
       - uses: actions/configure-pages@v5
         with:
           enablement: true
