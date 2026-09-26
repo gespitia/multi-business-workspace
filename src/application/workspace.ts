@@ -3,7 +3,7 @@ export const permissions:Record<Role,string[]>={owner:['view','create','edit','r
 export type WorkspaceEvent={id:number;type:'TENANT_SWITCH'|'ROLE_CHANGE'|'READ'|'WRITE'|'ASSISTANT';tenantId:string;role:Role;detail:string};
 export type WorkspaceHooks={onEvent?:(event:WorkspaceEvent)=>void};
 export function createWorkspace(initial=businesses[0].id,hooks:WorkspaceHooks={}){
- const repo=new TenantRepository(businesses);let tenantId=initial;let role:Role='owner';let seq=0;const events:WorkspaceEvent[]=[];
+ const repo=new TenantRepository(businesses);let tenantId=businesses.some(b=>b.id===initial)?initial:businesses[0].id;let role:Role='owner';let seq=0;const events:WorkspaceEvent[]=[];
  const record=(type:WorkspaceEvent['type'],detail:string)=>{const event={id:++seq,type,tenantId,role,detail};events.unshift(event);if(events.length>12)events.pop();hooks.onEvent?.(event)};
  record('READ','Workspace initialized');
  return{
