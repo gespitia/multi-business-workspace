@@ -26,4 +26,4 @@ function render(){const b=ws.business;const customers=ws.customers().filter(c=>(
 }
 }
 
-if(document.querySelector('#app'))mount(document.querySelector('#app')!);
+const app=document.querySelector<HTMLElement>('#app');if(app)mount(app);
