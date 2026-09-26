@@ -1,5 +1,5 @@
-import'./demo-bridge';import styleText from'./style.css?inline';import{createWorkspace,permissions}from'./application/workspace';import type{Role}from'./core/business';
-export type MountOptions={tenantId?:string;role?:Role;onEvent?:(event:ReturnType<ReturnType<typeof createWorkspace>['trace']>[number])=>void};
+import'./demo-bridge';import styleText from'./style.css?inline';import{createWorkspace,type WorkspaceEvent}from'./application/workspace';import{permissions}from'./application/workspace';import type{Role}from'./core/business';
+export type MountOptions={tenantId?:string;role?:Role;onEvent?:(event:WorkspaceEvent)=>void};
 const injectStyles=(root:HTMLElement)=>{if(root.querySelector(':scope > style[data-microfrontend-style]'))return;const style=document.createElement('style');style.dataset['microfrontendStyle']='';const shadow=root.getRootNode() instanceof ShadowRoot;style.textContent=shadow?styleText.replace(':root{',':host{'):styleText;root.prepend(style)};
 export function mount(root:HTMLElement,options:MountOptions={}){
 injectStyles(root);const ws=createWorkspace(options.tenantId,{onEvent:options.onEvent});if(options.role)ws.setRole(options.role);let section='overview',query='',assistant='',demoStep=0;
