@@ -1,9 +1,10 @@
 import{businesses,type Customer,type Role}from'../core/business';import{TenantRepository}from'../infrastructure/repository';
 export const permissions:Record<Role,string[]>={owner:['view','create','edit','reports','manage-users'],manager:['view','create','edit','reports'],viewer:['view','reports']};
 export type WorkspaceEvent={id:number;type:'TENANT_SWITCH'|'ROLE_CHANGE'|'READ'|'WRITE'|'ASSISTANT';tenantId:string;role:Role;detail:string};
-export function createWorkspace(initial=businesses[0].id){
+export type WorkspaceHooks={onEvent?:(event:WorkspaceEvent)=>void};
+export function createWorkspace(initial=businesses[0].id,hooks:WorkspaceHooks={}){
  const repo=new TenantRepository(businesses);let tenantId=initial;let role:Role='owner';let seq=0;const events:WorkspaceEvent[]=[];
- const record=(type:WorkspaceEvent['type'],detail:string)=>{events.unshift({id:++seq,type,tenantId,role,detail});if(events.length>12)events.pop()};
+ const record=(type:WorkspaceEvent['type'],detail:string)=>{const event={id:++seq,type,tenantId,role,detail};events.unshift(event);if(events.length>12)events.pop();hooks.onEvent?.(event)};
  record('READ','Workspace initialized');
  return{
   get context(){return{tenantId,role}},get business(){record('READ','Loaded business context');return repo.business(tenantId)},
